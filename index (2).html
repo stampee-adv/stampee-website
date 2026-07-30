@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stampee — Sticker Advertising on Taxis</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #F97316;
+  --orange-dark: #EA6C0A;
+  --yellow: #FBBF24;
+  --pink: #EC4899;
+  --green: #22C55E;
+  --sky: #38BDF8;
+  --navy: #1A1A2E;
+  --navy2: #16213E;
+  --cream: #FFF7ED;
+  --cream2: #FEF3C7;
+  --white: #FFFFFF;
+  --muted: #78716C;
+  --light: #FED7AA;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--navy);
+  overflow-x: hidden;
+}
+
+.fredoka { font-family: 'Fredoka One', cursive; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: rgba(255,247,237,0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 2px solid var(--orange);
+}
+.nav-logo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  color: var(--orange);
+  letter-spacing: 0.01em;
+}
+.nav-logo span { color: var(--navy); }
+.nav-links { display: flex; gap: 1.8rem; list-style: none; }
+.nav-links a {
+  color: var(--navy); text-decoration: none;
+  font-size: 0.92rem; font-weight: 500;
+  transition: color 0.18s;
+}
+.nav-links a:hover { color: var(--orange); }
+.nav-cta {
+  background: var(--navy); color: var(--white);
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem; padding: 0.55rem 1.4rem;
+  border-radius: 50px; text-decoration: none;
+  transition: background 0.18s, transform 0.15s;
+  letter-spacing: 0.02em;
+}
+.nav-cta:hover { background: var(--orange); transform: scale(1.04); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 5rem;
+  position: relative; overflow: hidden;
+}
+
+/* Floating dot pattern background */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(249,115,22,0.18) 1.5px, transparent 1.5px);
+  background-size: 36px 36px;
+  pointer-events: none;
+}
+
+/* Big wobbly circle behind hero text */
+.hero-blob {
+  position: absolute;
+  width: 520px; height: 520px;
+  background: var(--orange);
+  border-radius: 61% 39% 54% 46% / 43% 57% 43% 57%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.12;
+  animation: wobble 8s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes wobble {
+  0%,100% { border-radius: 61% 39% 54% 46% / 43% 57% 43% 57%; }
+  33%      { border-radius: 44% 56% 37% 63% / 60% 40% 60% 40%; }
+  66%      { border-radius: 55% 45% 62% 38% / 38% 62% 38% 62%; }
+}
+
+.hero-badge {
+  display: inline-block;
+  background: var(--yellow);
+  color: var(--navy);
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.85rem;
+  padding: 0.35rem 1.1rem;
+  border-radius: 50px;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+  animation: fadeUp 0.6s ease both;
+}
+.hero h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(3.2rem, 8vw, 6.5rem);
+  line-height: 1.0;
+  color: var(--white);
+  margin-bottom: 1.2rem;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero h1 .orange { color: var(--orange); }
+.hero h1 .yellow { color: var(--yellow); }
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: rgba(255,255,255,0.7);
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.65;
+  font-weight: 300;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.hero-btns {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.btn-main {
+  background: var(--orange); color: var(--white);
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem; padding: 0.85rem 2.2rem;
+  border-radius: 50px; text-decoration: none;
+  transition: transform 0.15s, background 0.15s;
+  letter-spacing: 0.03em;
+}
+.btn-main:hover { background: var(--orange-dark); transform: translateY(-2px) scale(1.03); }
+.btn-sec {
+  background: transparent; color: var(--white);
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem; padding: 0.85rem 2.2rem;
+  border-radius: 50px; text-decoration: none;
+  border: 2px solid rgba(255,255,255,0.3);
+  transition: border-color 0.15s, color 0.15s, transform 0.15s;
+  letter-spacing: 0.03em;
+}
+.btn-sec:hover { border-color: var(--yellow); color: var(--yellow); transform: translateY(-2px); }
+
+/* Animated taxi strip at bottom of hero */
+.taxi-strip {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 56px; overflow: hidden;
+  display: flex; align-items: center;
+}
+.taxi-track {
+  display: flex; gap: 48px;
+  animation: scroll 18s linear infinite;
+  white-space: nowrap;
+}
+@keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.taxi-chip {
+  background: var(--orange);
+  color: var(--white);
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.9rem;
+  padding: 0.4rem 1.2rem;
+  border-radius: 50px;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+.taxi-chip.alt { background: var(--yellow); color: var(--navy); }
+.taxi-chip.pink { background: var(--pink); }
+.taxi-chip.green { background: var(--green); color: var(--navy); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── STATS BAR ── */
+.stats-bar {
+  background: var(--orange);
+  padding: 2.5rem 2rem;
+}
+.stats-inner {
+  max-width: 900px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem; text-align: center;
+}
+.stat-n {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.6rem; color: var(--white); line-height: 1;
+}
+.stat-l { font-size: 0.85rem; color: rgba(255,255,255,0.8); margin-top: 4px; font-weight: 400; }
+
+/* ── HOW IT WORKS ── */
+.how { background: var(--cream); padding: 6rem 2rem; }
+.section-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.85rem; letter-spacing: 0.12em;
+  color: var(--orange); text-transform: uppercase;
+  text-align: center; margin-bottom: 0.75rem;
+}
+.section-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2rem, 4vw, 3rem);
+  text-align: center; color: var(--navy);
+  margin-bottom: 0.75rem; line-height: 1.15;
+}
+.section-sub {
+  text-align: center; color: var(--muted);
+  font-size: 1.05rem; max-width: 520px;
+  margin: 0 auto 3.5rem; line-height: 1.65; font-weight: 300;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem; max-width: 1000px; margin: 0 auto;
+}
+.step {
+  background: var(--white);
+  border-radius: 20px; padding: 2rem 1.6rem;
+  border: 2px solid var(--light);
+  transition: transform 0.2s, border-color 0.2s;
+  position: relative;
+}
+.step:hover { transform: translateY(-4px); border-color: var(--orange); }
+.step-num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 3rem; line-height: 1;
+  margin-bottom: 0.75rem;
+}
+.step h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.15rem; color: var(--navy);
+  margin-bottom: 0.5rem;
+}
+.step p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; font-weight: 300; }
+
+/* ── AUDIENCE SPLIT ── */
+.audience { display: grid; grid-template-columns: 1fr 1fr; }
+.aud-panel { padding: 5rem 3.5rem; }
+.aud-panel.companies { background: var(--navy); }
+.aud-panel.drivers { background: var(--navy2); }
+.aud-panel .aud-emoji {
+  font-size: 2.8rem; margin-bottom: 1.2rem;
+  display: block;
+}
+.aud-panel h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem; margin-bottom: 0.75rem; line-height: 1.2;
+}
+.companies h2 { color: var(--yellow); }
+.drivers h2 { color: var(--orange); }
+.aud-panel p {
+  color: rgba(255,255,255,0.65); font-size: 0.95rem;
+  line-height: 1.7; margin-bottom: 1.8rem; font-weight: 300;
+}
+.aud-list { list-style: none; }
+.aud-list li {
+  font-size: 0.93rem; color: rgba(255,255,255,0.8);
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: flex-start; gap: 0.7rem;
+  line-height: 1.5;
+}
+.aud-list li:last-child { border-bottom: none; }
+.tick {
+  width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; flex-shrink: 0; margin-top: 1px; font-weight: 700;
+}
+.companies .tick { background: var(--yellow); color: var(--navy); }
+.drivers .tick { background: var(--orange); color: var(--white); }
+
+/* ── PRICING ── */
+.pricing { background: var(--cream2); padding: 6rem 2rem; }
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.5rem; max-width: 1000px; margin: 0 auto;
+}
+.price-card {
+  background: var(--white);
+  border-radius: 24px; padding: 2.2rem 2rem;
+  border: 2px solid #FED7AA;
+  position: relative; transition: transform 0.2s;
+}
+.price-card:hover { transform: translateY(-5px); }
+.price-card.featured {
+  background: var(--navy);
+  border-color: var(--orange);
+}
+.featured-badge {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: var(--orange); color: var(--white);
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.8rem; padding: 0.3rem 1.1rem;
+  border-radius: 50px; letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.price-tier {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem; margin-bottom: 0.2rem;
+}
+.price-card:not(.featured) .price-tier { color: var(--navy); }
+.price-card.featured .price-tier { color: var(--yellow); }
+.price-desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.3rem; }
+.price-card.featured .price-desc { color: rgba(255,255,255,0.5); }
+.price-amount {
+  font-family: 'Fredoka One', cursive;
+  font-size: 3rem; line-height: 1; margin-bottom: 0.2rem;
+}
+.price-card:not(.featured) .price-amount { color: var(--orange); }
+.price-card.featured .price-amount { color: var(--white); }
+.price-period { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.8rem; }
+.price-card.featured .price-period { color: rgba(255,255,255,0.45); }
+.price-features { list-style: none; }
+.price-features li {
+  font-size: 0.9rem; padding: 0.5rem 0;
+  border-bottom: 1px solid #FEF3C7;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.price-card.featured .price-features li { border-bottom-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); }
+.price-features li:last-child { border-bottom: none; }
+.ftick { color: var(--green); font-size: 1rem; font-weight: 700; }
+.price-card.featured .ftick { color: var(--yellow); }
+.price-cta {
+  display: block; text-align: center; margin-top: 1.8rem;
+  padding: 0.85rem; border-radius: 50px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem; text-decoration: none;
+  transition: all 0.18s; letter-spacing: 0.03em;
+}
+.price-card:not(.featured) .price-cta {
+  background: var(--orange); color: var(--white);
+}
+.price-card:not(.featured) .price-cta:hover { background: var(--orange-dark); transform: scale(1.02); }
+.price-card.featured .price-cta {
+  background: var(--orange); color: var(--white);
+}
+.price-card.featured .price-cta:hover { background: var(--yellow); color: var(--navy); transform: scale(1.02); }
+
+/* ── STICKER SECTION ── */
+.sticker-section { background: var(--orange); padding: 5rem 2rem; text-align: center; }
+.sticker-section h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: var(--white); margin-bottom: 0.75rem;
+}
+.sticker-section p { color: rgba(255,255,255,0.82); font-size: 1rem; margin-bottom: 3rem; font-weight: 300; }
+
+/* Car side-profile with square door sticker */
+.taxi-mock-wrap { max-width: 720px; margin: 0 auto 1.75rem; }
+.taxi-svg { width: 100%; height: auto; display: block; margin-bottom: 1.5rem; }
+.st-brand { font-family: 'Fredoka One', cursive; }
+.st-sub, .st-wm { font-family: 'DM Sans', sans-serif; }
+.sticker-colours {
+  display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;
+}
+.col-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  cursor: pointer; border: 3px solid transparent;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.col-dot:hover, .col-dot.active { transform: scale(1.25); border-color: var(--white); }
+
+/* ── SIGN UP ── */
+.signup { background: var(--navy); padding: 6rem 2rem; }
+.signup-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2.5rem; max-width: 900px; margin: 0 auto;
+}
+.signup-panel h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.7rem; margin-bottom: 0.5rem;
+}
+.companies-panel h3 { color: var(--yellow); }
+.drivers-panel h3 { color: var(--orange); }
+.signup-panel p {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.5rem; font-weight: 300;
+}
+.form-group { margin-bottom: 0.85rem; }
+.form-group input, .form-group select {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 12px; padding: 0.75rem 1rem;
+  color: var(--white); font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem; outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus { border-color: var(--orange); }
+.form-group input::placeholder { color: rgba(255,255,255,0.3); }
+.form-group select { color: rgba(255,255,255,0.5); }
+.form-group select option { background: var(--navy); color: var(--white); }
+.submit-btn {
+  width: 100%; padding: 0.9rem;
+  border: none; border-radius: 50px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.05rem; cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s;
+  margin-top: 0.5rem; letter-spacing: 0.03em;
+}
+.submit-btn:hover { transform: scale(1.02); opacity: 0.9; }
+.companies-panel .submit-btn { background: var(--yellow); color: var(--navy); }
+.drivers-panel .submit-btn { background: var(--orange); color: var(--white); }
+
+/* signup divider */
+.signup-divider {
+  display: flex; align-items: center; justify-content: center;
+}
+.signup-divider-line {
+  width: 1px; height: 100%;
+  background: rgba(255,255,255,0.08);
+  min-height: 400px;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: #0D0D1A;
+  padding: 2.5rem 2.5rem;
+  border-top: 3px solid var(--orange);
+}
+.footer-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 1rem;
+}
+.footer-logo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.5rem; color: var(--orange);
+}
+.footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.footer-links a { color: rgba(255,255,255,0.4); font-size: 0.85rem; text-decoration: none; transition: color 0.15s; }
+.footer-links a:hover { color: var(--orange); }
+.footer-copy { color: rgba(255,255,255,0.25); font-size: 0.8rem; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.2rem; }
+  .nav-links { display: none; }
+  .hero { padding: 7rem 1.5rem 5rem; }
+  .how, .pricing, .signup, .sticker-section { padding: 4rem 1.2rem; }
+  .aud-panel { padding: 3.5rem 1.5rem; }
+  .audience, .signup-grid { grid-template-columns: 1fr; }
+  .signup-divider { display: none; }
+  .footer-inner { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo fredoka">stamp<span>ee</span></div>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#drivers">Drivers</a></li>
+    <li><a href="#contact">Get in touch</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Let's go! 🚕</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blob"></div>
+  <div class="hero-badge">🏷️ Sticker advertising on taxis</div>
+  <h1 class="fredoka">
+    Your brand.<br>
+    <span class="orange">Stuck</span> on<br>
+    <span class="yellow">the city.</span>
+  </h1>
+  <p class="hero-sub">
+    Stampee puts your business on taxis — affordable advertising that drives around your city all day, every day. Simple, vibrant, impossible to ignore.
+  </p>
+  <div class="hero-btns">
+    <a href="#contact" class="btn-main">Advertise with Stampee</a>
+    <a href="#drivers" class="btn-sec">Earn as a driver</a>
+  </div>
+
+  <!-- Scrolling ticker -->
+  <div class="taxi-strip">
+    <div class="taxi-track" id="track">
+      <span class="taxi-chip">🚕 your brand on the move</span>
+      <span class="taxi-chip alt">💰 drivers earn extra</span>
+      <span class="taxi-chip pink">🏙️ city-wide reach</span>
+      <span class="taxi-chip green">✅ no wrap needed</span>
+      <span class="taxi-chip">🏷️ sticker simple</span>
+      <span class="taxi-chip alt">📍 urban targeting</span>
+      <span class="taxi-chip pink">⚡ live in 7 days</span>
+      <span class="taxi-chip green">🔄 easy on, easy off</span>
+      <span class="taxi-chip">🚕 your brand on the move</span>
+      <span class="taxi-chip alt">💰 drivers earn extra</span>
+      <span class="taxi-chip pink">🏙️ city-wide reach</span>
+      <span class="taxi-chip green">✅ no wrap needed</span>
+      <span class="taxi-chip">🏷️ sticker simple</span>
+      <span class="taxi-chip alt">📍 urban targeting</span>
+      <span class="taxi-chip pink">⚡ live in 7 days</span>
+      <span class="taxi-chip green">🔄 easy on, easy off</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div><div class="stat-n fredoka">10,000+</div><div class="stat-l">taxis in Ireland’s capital</div></div>
+    <div><div class="stat-n fredoka">5 days</div><div class="stat-l">minimum per week, on the road per taxi</div></div>
+    <div><div class="stat-n fredoka">7 days</div><div class="stat-l">from sign-up to sticker on</div></div>
+    <div><div class="stat-n fredoka">100%</div><div class="stat-l">Irish owned for local benefit</div></div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-label">dead simple process</div>
+  <h2 class="section-title fredoka">How Stampee works</h2>
+  <p class="section-sub">No complicated contracts. No full wraps. Just stickers, taxis, and your brand all over the city.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01 🎯</div>
+      <h3>Pick your campaign</h3>
+      <p>Decide on your Stampee sticker design and choose how many taxis will display your brand. Sign up to our simple online agreement.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02 🚕</div>
+      <h3>We match you with drivers</h3>
+      <p>We connect your campaign with verified, active taxi drivers in your chosen area. We handle all driver communication.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03 🏷️</div>
+      <h3>Sticker goes on</h3>
+      <p>High-quality, weatherproof vinyl stickers are applied professionally. Car-wash safe. Removable cleanly in minutes.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04 📍</div>
+      <h3>Your brand hits the streets</h3>
+      <p>Watch your brand move across the city. We send you a monthly coverage report with mileage data and a master report at the end of the campaign.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STICKER PREVIEW -->
+<section class="sticker-section" id="stickers">
+  <h2 class="fredoka">See it in action</h2>
+  <p>Your sticker. Your colours. On real taxis across your city.</p>
+
+  <div class="taxi-mock-wrap">
+    <svg class="taxi-svg" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Taxi with a square sticker on the rear door">
+      <!-- ground shadow -->
+      <ellipse cx="300" cy="284" rx="268" ry="12" fill="#000" opacity="0.16"/>
+
+      <!-- body -->
+      <path d="M 22 240 L 22 205 C 22 186 34 174 52 170 L 168 146 L 224 82
+               C 231 73 242 68 254 68 L 424 68 C 437 68 449 74 456 85
+               L 494 142 L 552 152 C 572 156 582 170 582 190 L 582 240 Z"
+            fill="#FFFFFF" stroke="#1A1A2E" stroke-width="3" stroke-linejoin="round"/>
+
+      <!-- taxi roof sign -->
+      <rect x="302" y="50" width="58" height="18" rx="5" fill="#FBBF24" stroke="#1A1A2E" stroke-width="2.5"/>
+      <text x="331" y="63.5" text-anchor="middle" class="st-brand" font-size="10" fill="#1A1A2E">TAXI</text>
+
+      <!-- glass -->
+      <path d="M 230 84 L 292 84 L 292 132 L 186 132 Z" fill="#2D4A6E"/>
+      <rect x="302" y="84" width="48" height="48" rx="4" fill="#2D4A6E"/>
+      <rect x="362" y="84" width="68" height="48" rx="4" fill="#2D4A6E"/>
+      <path d="M 450 88 L 458 88 L 482 128 L 450 128 Z" fill="#2D4A6E"/>
+
+      <!-- door split lines + handle -->
+      <line x1="250" y1="150" x2="250" y2="238" stroke="#B4BAC6" stroke-width="2.5"/>
+      <line x1="356" y1="146" x2="356" y2="238" stroke="#B4BAC6" stroke-width="2.5"/>
+      <line x1="462" y1="144" x2="462" y2="238" stroke="#B4BAC6" stroke-width="2.5"/>
+      <rect x="308" y="159" width="26" height="7" rx="3.5" fill="#6B7280"/>
+
+      <!-- lights -->
+      <path d="M 24 196 L 24 182 C 35 180 45 182 49 190 L 49 197 Z" fill="#FBBF24" stroke="#1A1A2E" stroke-width="2" stroke-linejoin="round"/>
+      <rect x="560" y="184" width="19" height="16" rx="4" fill="#EF4444" stroke="#1A1A2E" stroke-width="2"/>
+
+      <!-- ===== THE STICKER — square, on the rear door ===== -->
+      <rect id="sticker" x="370" y="154" width="78" height="78" rx="7" fill="#F97316" style="transition:fill .4s"/>
+      <text id="sticker-brand" class="st-brand" x="409" y="189" text-anchor="middle"
+            font-size="11" fill="#FFFFFF" textLength="66" lengthAdjust="spacingAndGlyphs">Your Brand Here</text>
+      <text id="sticker-sub" class="st-sub" x="409" y="203" text-anchor="middle"
+            font-size="7" fill="#FFFFFF" opacity="0.75" textLength="54" lengthAdjust="spacingAndGlyphs">yourwebsite.com</text>
+      <text id="sticker-wm" class="st-wm" x="409" y="224" text-anchor="middle"
+            font-size="5.5" fill="#FFFFFF" opacity="0.55" letter-spacing="0.4">powered by stampee</text>
+
+      <!-- wheels -->
+      <circle cx="115" cy="240" r="38" fill="#1A1A2E"/>
+      <circle cx="115" cy="240" r="17" fill="#9CA3AF"/>
+      <circle cx="115" cy="240" r="6" fill="#1A1A2E"/>
+      <circle cx="505" cy="240" r="38" fill="#1A1A2E"/>
+      <circle cx="505" cy="240" r="17" fill="#9CA3AF"/>
+      <circle cx="505" cy="240" r="6" fill="#1A1A2E"/>
+    </svg>
+    <div class="sticker-colours">
+      <div class="col-dot active" style="background:#F97316" onclick="setSticker('#F97316','Sunset Orange','yourwebsite.com',this)" title="Sunset Orange"></div>
+      <div class="col-dot" style="background:#EC4899" onclick="setSticker('#EC4899','Hot Pink','yourwebsite.com',this)" title="Hot Pink"></div>
+      <div class="col-dot" style="background:#22C55E" onclick="setSticker('#22C55E','Fresh Green','yourwebsite.com',this)" title="Zesty Green"></div>
+      <div class="col-dot" style="background:#38BDF8" onclick="setSticker('#38BDF8','Sky Blue','yourwebsite.com',this)" title="Sky Blue"></div>
+      <div class="col-dot" style="background:#FBBF24" onclick="setSticker('#FBBF24','Electric Yellow','yourwebsite.com',this)" title="Electric Yellow"></div>
+      <div class="col-dot" style="background:#7C3AED" onclick="setSticker('#7C3AED','Bold Purple','yourwebsite.com',this)" title="Purple"></div>
+      <div class="col-dot" style="background:#1A1A2E" onclick="setSticker('#1A1A2E','Night Navy','yourwebsite.com',this)" title="Night Navy"></div>
+    </div>
+    <p style="color:rgba(255,255,255,0.55);font-size:0.82rem;margin-top:1rem;">Click the dots to preview sticker colours</p>
+  </div>
+</section>
+
+<!-- AUDIENCE SPLIT -->
+<div class="audience" id="drivers">
+  <div class="aud-panel companies">
+    <span class="aud-emoji">🏢</span>
+    <h2 class="fredoka">For businesses</h2>
+    <p>Get your brand in front of thousands of people across your city — every single day. No algorithms. No skip buttons. Just your sticker, on a taxi, moving through the streets.</p>
+    <ul class="aud-list">
+      <li><span class="tick">✓</span> Reach urban commuters, shoppers, locals and airport arrivals</li>
+      <li><span class="tick">✓</span> Far cheaper and more accessible than a billboard or other transit advertising</li>
+      <li><span class="tick">✓</span> We use your custom sticker design, or can suggest designs upon request</li>
+      <li><span class="tick">✓</span> Monthly mileage report and location data for quantifiable results</li>
+    </ul>
+  </div>
+  <div class="aud-panel drivers">
+    <span class="aud-emoji">🚕</span>
+    <h2 class="fredoka">For taxi drivers</h2>
+    <p>Earn extra money for doing nothing extra. We put a sticker on your car, you drive your normal routes, we pay you monthly. Dead simple.</p>
+    <ul class="aud-list">
+      <li><span class="tick">✓</span> Earn extra income by displaying ads for a competitive fee</li>
+      <li><span class="tick">✓</span> Sticker on and off in minutes</li>
+      <li><span class="tick">✓</span> No damage — leaves no residue</li>
+      <li><span class="tick">✓</span> Car-wash safe materials</li>
+      <li><span class="tick">✓</span> Paid reliably every month</li>
+    </ul>
+  </div>
+</div>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-label">Simple and Effective</div>
+  <h2 class="section-title fredoka">Our packages</h2>
+  <p class="section-sub">3-month campaign term with low-entry price.</p>
+  <div class="pricing-grid" style="max-width:380px;">
+    <div class="price-card featured">
+      <div class="featured-badge">Available now ⭐</div>
+      <div class="price-tier fredoka">Double Stamp</div>
+      <div class="price-desc">Both door stickers</div>
+      <div class="price-amount fredoka" style="font-size:1.6rem;">Price on Application</div>
+      <div class="price-period">per taxi / per month</div>
+      <ul class="price-features">
+        <li><span class="ftick">✓</span> Both side door stickers</li>
+        <li><span class="ftick">✓</span> 1 taxi minimum</li>
+        <li><span class="ftick">✓</span> 5+ days/week driving per taxi</li>
+        <li><span class="ftick">✓</span> 35+ hours/week driving per taxi</li>
+        <li><span class="ftick">✓</span> Geo coverage report</li>
+        <li><span class="ftick">✓</span> Free sticker production</li>
+        <li><span class="ftick">✓</span> Application and removal are included</li>
+      </ul>
+      <a href="#contact" class="price-cta fredoka">Get started →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SIGN UP -->
+<section class="signup" id="contact">
+  <div class="section-label" style="color:var(--orange)">get in touch</div>
+  <h2 class="section-title fredoka" style="color:var(--white)">Ready to Stampee? 🎉</h2>
+  <p class="section-sub" style="color:rgba(255,255,255,0.5)">Fill in your details and we'll get back to you within 24 hours.</p>
+
+  <div class="signup-grid">
+    <div class="signup-panel companies-panel">
+      <h3 class="fredoka">I want to advertise</h3>
+      <p>Tell us about your business and we'll put together a campaign proposal.</p>
+      <div class="form-group"><input type="text" placeholder="Your name"></div>
+      <div class="form-group"><input type="text" placeholder="Business name"></div>
+      <div class="form-group"><input type="email" placeholder="Email address"></div>
+      <div class="form-group"><input type="tel" placeholder="Phone number"></div>
+      <div class="form-group">
+        <select>
+          <option value="" disabled selected>Which package? (optional)</option>
+          <option>Double Stamp — Price on Application</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <button class="submit-btn fredoka">Send my enquiry 🚀</button>
+    </div>
+
+    <div class="signup-divider">
+      <div class="signup-divider-line"></div>
+    </div>
+
+    <div class="signup-panel drivers-panel">
+      <h3 class="fredoka">I want to drive & earn</h3>
+      <p>Register your interest and we'll be in touch when a campaign is available in your area.</p>
+      <div class="form-group"><input type="text" placeholder="Your name"></div>
+      <div class="form-group"><input type="email" placeholder="Email address"></div>
+      <div class="form-group"><input type="tel" placeholder="Phone number"></div>
+      <div class="form-group"><input type="text" placeholder="What city do you drive in?"></div>
+      <div class="form-group">
+        <select>
+          <option value="" disabled selected>Vehicle type</option>
+          <option>Saloon taxi</option>
+          <option>Estate taxi</option>
+          <option>MPV / minivan</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <button class="submit-btn fredoka">Register my interest 🚕</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo fredoka">stampee</div>
+    <div class="footer-links">
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#drivers">For drivers</a>
+      <a href="mailto:info@stampee.ie">info@stampee.ie</a>
+    </div>
+    <div class="footer-copy">© 2026 Stampee. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+function setSticker(color, brand, sub, el) {
+  document.getElementById('sticker').setAttribute('fill', color);
+  document.getElementById('sticker-brand').textContent = brand;
+  document.getElementById('sticker-sub').textContent = sub;
+
+  // pick readable text colour for light vs dark stickers
+  var r = parseInt(color.substr(1,2),16),
+      g = parseInt(color.substr(3,2),16),
+      b = parseInt(color.substr(5,2),16);
+  var light = (0.299*r + 0.587*g + 0.114*b) > 150;
+  var ink = light ? '#1A1A2E' : '#FFFFFF';
+  document.getElementById('sticker-brand').setAttribute('fill', ink);
+  document.getElementById('sticker-sub').setAttribute('fill', ink);
+  document.getElementById('sticker-wm').setAttribute('fill', ink);
+
+  document.querySelectorAll('.col-dot').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
